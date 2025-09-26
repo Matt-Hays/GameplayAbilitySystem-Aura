@@ -17,3 +17,5 @@ Config
 *.suo
 *.xcodeproj
 *.xcworkspace
+*.idea
+*.vsconfig
