@@ -66,42 +66,16 @@ void AAuraPlayerController::CursorTrace()
 	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
 	if (!CursorHit.bBlockingHit) return;
-
-
+	
 	LastActor = ThisActor;
 	ThisActor = CursorHit.GetActor();
 
-	/**
-	 * Line trace from cursor. Several scenarios.
-	 * A. LastActor is null && ThisActor is null.
-	 *		- Do nothing.
-	 *		
-	 * B. LastActor is null && ThisActor is non-null.
-	 *		- Call highlight on ThisActor.
-	 *		
-	 * C. LastActor is non-null && ThisActor is null.
-	 *		- Call UnHighlight on LastActor.
-	 *		
-	 * D. Last Actor is non-null && This Actor is non-null && LastActor != ThisActor.
-	 *		- Call UnHighlight on LastActor.
-	 *		- Call Highlight on ThisActor.
-	 *
-	 * E. Last Actor is non-null && This Actor is non-null && LastActor == ThisActor.
-	 *		- Do nothing.
-	 */
-	if (!LastActor && ThisActor)
-	{
-		// Case B
+	if (!LastActor && ThisActor) // Highlight new mouseover actor
 		ThisActor->HighlightActor();
-	}
-	else if (LastActor && !ThisActor)
-	{
-		// Case C
+	else if (LastActor && !ThisActor) // Remove highlight from old mouseover actor
 		LastActor->UnHighlightActor();
-	}
-	else if (LastActor && ThisActor && LastActor != ThisActor)
+	else if (LastActor && ThisActor && LastActor != ThisActor) // Remove from old mouseover -> highlight new mouseover
 	{
-		// Case D
 		LastActor->UnHighlightActor();
 		ThisActor->HighlightActor();
 	}
